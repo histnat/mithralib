@@ -14,22 +14,28 @@ public class LoginSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder authenticationMgr) throws Exception {
         authenticationMgr.inMemoryAuthentication()
-            .withUser("journaldev")
-            .password("jd@123")
-            .authorities("ROLE_USER");
+        .withUser("frebeche")
+        .password("frebeche")
+        .authorities("ROLE_USER");
     }
      
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-            .antMatchers("/homePage").access("hasRole('ROLE_USER')")
+        http
+        	.authorizeRequests()
+            	.antMatchers("/index.jsf").access("hasRole('ROLE_USER')")
+            	.antMatchers("/css/mithra.css").anonymous()
             .and()
-                .formLogin().loginPage("/loginPage")
-                .defaultSuccessUrl("/homePage")
-                .failureUrl("/loginPage?error")
-                .usernameParameter("username").passwordParameter("password")                
+            .formLogin()
+            	.loginPage("/loginPage.jsf")
+            	.defaultSuccessUrl("/index.jsf")
+            	.failureUrl("/loginPage.jsf?error")
+                .usernameParameter("username")
+                .passwordParameter("password")
+                .permitAll()
             .and()
-                .logout().logoutSuccessUrl("/loginPage?logout"); 
+            .logout()
+            	.logoutSuccessUrl("/loginPage.jsf?logout"); 
          
     }
 }
